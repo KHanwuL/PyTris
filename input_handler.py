@@ -8,6 +8,7 @@ def handle_input():
     pygame.K_d: "input_moveR",
     pygame.K_q: "input_rotateL",
     pygame.K_e: "input_rotateR",
+    pygame.K_r: "input_holdBlock"
     }
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
@@ -31,3 +32,5 @@ def handle_input_action(input, game):
     drop_y = game.current_block.checkDropPosition()
     game.current_block.setPos(game.current_block.Xpos, drop_y)
     game.handle_block_landing()
+  elif input == "input_holdBlock":
+    game.hold_current_block()

@@ -1,6 +1,6 @@
 import pygame
 from TetrisBoard import GameBoard
-from Tetromino import Block
+from Tetromino import TETROMINOS, Block
 
 COLORS = {
 		0: (0, 0, 0),  # 빈칸
@@ -24,6 +24,9 @@ GAME_Y_OFFSET = 0
 
 PREVIEW_X = GAME_X_OFFSET + GameBoard.MAP_WIDTH * BLOCK_SIZE + BLOCK_SIZE * 2
 PREVIEW_Y = BLOCK_SIZE * 2
+
+HOLD_X = BLOCK_SIZE * 2
+HOLD_Y = BLOCK_SIZE * 6
 
 
 def draw_board(screen, board: GameBoard):
@@ -87,6 +90,28 @@ def draw_preview(screen, next_block: Block):
 	font = pygame.font.SysFont("comicsans", 24)
 	label = font.render("NEXT", 1, (255, 255, 255))
 	screen.blit(label, (PREVIEW_X, PREVIEW_Y - BLOCK_SIZE))
+
+def draw_hold(screen, hold_block_name):
+	if hold_block_name is None:
+		font = pygame.font.SysFont("comicsans", 24)
+		label = font.render("HOLD", 1, (255, 255, 255))
+		screen.blit(label, (HOLD_X, HOLD_Y - BLOCK_SIZE))
+		return
+	
+	shape = TETROMINOS[hold_block_name]
+	
+	for dy in range(shape.shape[0]):
+		for dx in range(shape.shape[1]):
+			if shape[dy, dx] != 0:
+				color = COLORS.get(shape[dy, dx], (255, 255, 255))
+				hx = HOLD_X + dx * BLOCK_SIZE
+				hy = HOLD_Y + dy * BLOCK_SIZE
+				pygame.draw.rect(screen, color, (hx, hy, BLOCK_SIZE, BLOCK_SIZE))
+				pygame.draw.rect(screen, (50, 50, 50), (hx, hy, BLOCK_SIZE, BLOCK_SIZE), 1)
+	
+	font = pygame.font.SysFont("comicsans", 24)
+	label = font.render("HOLD", 1, (255, 255, 255))
+	screen.blit(label, (HOLD_X, HOLD_Y - BLOCK_SIZE))
 
 def draw_ui(screen, game):
 	font = pygame.font.SysFont("comicsans", 24)
